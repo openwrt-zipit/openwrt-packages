@@ -9,13 +9,15 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=igmpproxy
 PKG_VERSION:=0.1
-PKG_RELEASE:=3
+PKG_RELEASE:=8
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/igmpproxy
 PKG_MD5SUM:=c56f41ec195bc1fe016369bf74efc5a1
 
 include $(INCLUDE_DIR)/package.mk
+
+PKG_FIXUP:=autoreconf
 
 define Package/igmpproxy
   SECTION:=net
@@ -31,7 +33,7 @@ define Package/igmpproxy/description
 endef
 
 define Package/igmpproxy/conffiles
-/etc/igmpproxy.conf
+/etc/config/igmpproxy
 endef
 
 TARGET_CFLAGS += -Dlog=igmpproxy_log
@@ -43,8 +45,8 @@ define Build/Compile
 endef
 
 define Package/igmpproxy/install
-	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_CONF) ./files/igmpproxy.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_CONF) ./files/igmpproxy.config $(1)/etc/config/igmpproxy
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/igmpproxy.init $(1)/etc/init.d/igmpproxy
 	$(INSTALL_DIR) $(1)/usr/sbin
