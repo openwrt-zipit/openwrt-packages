@@ -16,14 +16,14 @@ PKG_SOURCE_URL:=http://www.fftw.org
 PKG_MD5SUM:=b616e5c91218cc778b5aa735fefb61ae
 
 PKG_BUILD_DIR=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/fftw-$(PKG_VERSION)
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/fftw3
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=@!avr32
+  DEPENDS:=@!avr32 +libpthread
   VARIANT:=double
   TITLE:=Fast Fourier transform library
   URL:=http://www.fftw.org/

@@ -17,7 +17,7 @@ PKG_SOURCE_URL:= \
 	http://www.mirrorservice.org/sites/ftp.isc.org/isc/bind9/$(PKG_VERSION)
 PKG_MD5SUM:=bb37c88f81e03b1d5208d238c6aa51fa
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/bind/Default
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+bind-libs +libopenssl
+  DEPENDS:=+bind-libs
   TITLE:=bind
   URL:=https://www.isc.org/software/bind
   SUBMENU:=IP Addresses and Names
@@ -34,6 +34,7 @@ endef
 define Package/bind-libs
   SECTION:=libs
   CATEGORY:=Libraries
+  DEPENDS:=+libopenssl
   TITLE:=bind shared libraries
   URL:=https://www.isc.org/software/bind
 endef
