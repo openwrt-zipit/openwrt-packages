@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=git
-PKG_VERSION:=1.7.10.4
+PKG_VERSION:=1.7.11
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://git-core.googlecode.com/files/
-PKG_MD5SUM:=68319d593d051ef76c26e945bbd2d7ac
+PKG_MD5SUM:=0beee35ec7d11756f51ca1d3ec5c0e16
 
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
@@ -24,7 +24,7 @@ define Package/git
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=Version Control Systems
-  DEPENDS:=+libopenssl +libcurl +libpthread
+  DEPENDS:=+libopenssl +libpthread
   TITLE:=The fast version control system
   URL:=http://git-scm.com
 endef
@@ -40,9 +40,11 @@ MAKE_FLAGS := \
 	CFLAGS="$(TARGET_CFLAGS)" \
 	CPPFLAGS="$(TARGET_CPPFLAGS)" \
 	LDFLAGS="$(TARGET_LDFLAGS)" \
+	NO_CURL="YesPlease" \
 	NO_EXPAT="YesPlease" \
 	NO_MKSTEMPS="YesPlease" \
 	NO_GETTEXT="YesPlease" \
+	NO_UNIX_SOCKETS="YesPlease" \
 	NO_IPV6="YesPlease" \
 	NO_ICONV="YesPlease" \
 	NO_NSEC="YesPlease" \
