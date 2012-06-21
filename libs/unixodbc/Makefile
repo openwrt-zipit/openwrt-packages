@@ -33,6 +33,7 @@ define Package/unixodbc
   TITLE+= (libraries)
   SECTION:=libs
   CATEGORY:=Libraries
+  DEPENDS:=+libltdl +libpthread
 endef
 
 define Package/unixodbc/description
@@ -45,7 +46,7 @@ define Package/unixodbc-tools
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE+= Tools
-  DEPENDS:=+unixodbc
+  DEPENDS:=+unixodbc +libncurses +libreadline
 endef
 
 define Package/unixodbc-tools/description
