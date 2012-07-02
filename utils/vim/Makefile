@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vim
 PKG_VERSION:=7.3
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 VIMVER:=73
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/vim/Default
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libncurses
+  DEPENDS:=+libncurses +libncursesw
   TITLE:=Vi IMproved - enhanced vi editor
   URL:=http://www.vim.org/
   SUBMENU:=Editors
