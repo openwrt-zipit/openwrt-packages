@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=irssi
 PKG_VERSION:=0.8.15
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://irssi.org/files/
@@ -27,7 +27,7 @@ define Package/irssi/Default
   SUBMENU:=Instant Messaging
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+glib2 +libncurses +libpthread
+  DEPENDS:=+glib2 +libncurses +libpthread +libncursesw
   TITLE:=Console IRC client
   MAINTAINER:=Peter Wagner <tripolar@gmx.at>
   URL:=http://irssi.org/
