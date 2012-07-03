@@ -27,7 +27,7 @@ define Package/irssi/Default
   SUBMENU:=Instant Messaging
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+glib2 +libncurses +libpthread
+  DEPENDS:=+glib2 +libncurses +libncursesw +libpthread
   TITLE:=Console IRC client
   MAINTAINER:=Peter Wagner <tripolar@gmx.at>
   URL:=http://irssi.org/
