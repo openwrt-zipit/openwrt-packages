@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=moc
 PKG_VERSION:=2.4.4
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.daper.net/pub/soft/moc/stable/
@@ -24,7 +24,9 @@ include $(INCLUDE_DIR)/nls.mk
 define Package/moc
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libcurl +BUILD_PATENTED:libmad +libvorbis $(ICONV_DEPENDS) +alsa-utils +libid3tag +libflac +libsamplerate +PACKAGE_libncursesw:libncursesw +!PACKAGE_libncursesw:libncurses +libffmpeg +libltdl +libspeex
+  DEPENDS:=+libcurl +BUILD_PATENTED:libmad +libvorbis $(ICONV_DEPENDS) +alsa-utils +libid3tag
+  DEPENDS+=+libflac +libsamplerate +PACKAGE_libncursesw:libncursesw +!PACKAGE_libncursesw:libncurses
+  DEPENDS+=+libffmpeg +libltdl +libspeex +libmpcdec +taglibc
   TITLE:=Music On Console
   URL:=http://moc.daper.net/
 endef
