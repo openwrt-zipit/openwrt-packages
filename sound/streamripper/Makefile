@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/streamripper
   SECTION:=multimedia
   CATEGORY:=Multimedia
-  DEPENDS:=+libmad +libfaad2 +libpthread
+  DEPENDS:=+libfaad2 +libpthread
   TITLE:=streamripper
   URL:=http://streamripper.sourceforge.net/
 endef
@@ -39,7 +39,7 @@ EXTRA_CFLAGS += $(TARGET_CPPFLAGS)
 CONFIGURE_ARGS+= \
 	--without-ogg \
 	--with-included-argv \
-	--without-included-libmad \
+	--with-included-libmad \
 	--without-libiconv-prefix \
 	--with-included-tre \
 	--with-gnu-ld \

@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/mutt
   SECTION:=mail
   CATEGORY:=Mail
-  DEPENDS:=+libopenssl +libncurses +libncursesw
+  DEPENDS:=+libopenssl +libncursesw
   TITLE:=Console mail client
   URL:=http://www.mutt.org/
 endef
@@ -37,6 +37,8 @@ CONFIGURE_ARGS += \
 	--oldincludedir=$(PKG_BUILD_DIR)/. \
 	--enable-pop \
 	--enable-imap \
+	--enable-smtp \
+	--enable-hcache \
 	--with-ssl \
 	--without-idn
 

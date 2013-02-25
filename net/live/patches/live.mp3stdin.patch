@@ -1,0 +1,52 @@
+diff -rupN original/testMP3Streamer.cpp new/testMP3Streamer.cpp
+--- original/testMP3Streamer.cpp	2012-02-04 03:01:47.000000000 -0800
++++ new/testMP3Streamer.cpp	2013-02-25 10:11:47.407806847 -0800
+@@ -57,11 +57,14 @@ struct sessionState_t {
+   Groupsock* rtcpGroupsock;
+ } sessionState;
+ 
+-char const* inputFileName = "test.mp3";
++char * inputFileName = "test.mp3";
+ 
+-void play(); // forward
++void play(char* FileName); // forward
+ 
+ int main(int argc, char** argv) {
++//	char* inputFileName = argv[1];
++	inputFileName = argv[1];
++	
+   // Begin by setting up our usage environment:
+   TaskScheduler* scheduler = BasicTaskScheduler::createNew();
+   env = BasicUsageEnvironment::createNew(*scheduler);
+@@ -139,7 +142,7 @@ int main(int argc, char** argv) {
+   delete[] url;
+ #endif
+ 
+-  play();
++  play(inputFileName);
+ 
+   env->taskScheduler().doEventLoop(); // does not return
+   return 0; // only to prevent compiler warning
+@@ -147,11 +150,12 @@ int main(int argc, char** argv) {
+ 
+ void afterPlaying(void* clientData); // forward
+ 
+-void play() {
++void play(char* FileName) {
+   // Open the file as a 'MP3 file source':
+-  sessionState.source = MP3FileSource::createNew(*env, inputFileName);
++  sessionState.source = MP3FileSource::createNew(*env, FileName);
++  
+   if (sessionState.source == NULL) {
+-    *env << "Unable to open file \"" << inputFileName
++    *env << "Unable to open file \"" << FileName
+ 	 << "\" as a MP3 file source\n";
+     exit(1);
+   }
+@@ -195,5 +199,5 @@ void afterPlaying(void* /*clientData*/) 
+   Medium::close(sessionState.source);
+ 
+   // And start another loop:
+-  play();
++  play(inputFileName);
+ }

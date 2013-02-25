@@ -1,0 +1,18 @@
+--- ./console/streamripper.c	2007-04-01 15:58:42.000000000 -0700
++++ ./console/streamripper.c	2013-01-10 22:50:54.291218000 -0800
+@@ -152,12 +152,12 @@
+ 
+ 	case RM_STATUS_RIPPING:
+ 	    if (m_curinfo.track_count < m_opt.dropcount) {
+-		strcpy(status_str, "skipping...   ");
++		strcpy(status_str, "skipping...");
+ 	    } else {
+-		strcpy(status_str, "ripping...    ");
++		strcpy(status_str, "ripping...");
+ 	    }
+ 	    format_byte_size(filesize_str, m_curinfo.filesize);
+-	    fprintf(stderr, "[%14s] %.50s [%7s]\r",
++	    fprintf(stderr, "[%10s] %-31.31s [%6s]\r",
+ 		    status_str,
+ 		    m_curinfo.filename,
+ 		    filesize_str);
