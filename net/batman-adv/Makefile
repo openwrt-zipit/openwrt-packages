@@ -10,10 +10,11 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=batman-adv
 
-PKG_VERSION:=2012.2.0
-BATCTL_VERSION:=2012.2.0
-PKG_MD5SUM:=68967ed1df709de18ab795722dde9341
-BATCTL_MD5SUM:=7abd284098c514d3f2858e8a956c495e
+PKG_VERSION:=2013.1.0
+BATCTL_VERSION:=2013.1.0
+PKG_RELEASE:=2
+PKG_MD5SUM:=fe1fd32eddde1f91575d7a7ec21d5782
+BATCTL_MD5SUM:=767bf36c77c517e1d321169bf9a7fae5
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.open-mesh.org/batman/releases/batman-adv-$(PKG_VERSION)
@@ -28,7 +29,7 @@ define KernelPackage/batman-adv
   URL:=http://www.open-mesh.org/
   MAINTAINER:=Marek Lindner <lindner_marek@yahoo.de>
   SUBMENU:=Network Support
-  DEPENDS:=+kmod-lib-crc16 +libc
+  DEPENDS:=+kmod-lib-crc16 +kmod-crypto-core +kmod-crypto-crc32c +kmod-lib-crc32c +libc
   TITLE:=B.A.T.M.A.N. Adv
   FILES:=$(PKG_BUILD_DIR)/batman-adv.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,50,batman-adv)
@@ -55,6 +56,7 @@ MAKE_BATMAN_ADV_ARGS += \
 	LINUX_VERSION="$(LINUX_VERSION)" \
 	CONFIG_BATMAN_ADV_DEBUG=$(if $(CONFIG_KMOD_BATMAN_ADV_DEBUG_LOG),y,n) \
 	CONFIG_BATMAN_ADV_BLA=$(if $(CONFIG_KMOD_BATMAN_ADV_BLA),y,n) \
+	CONFIG_BATMAN_ADV_DAT=$(if $(CONFIG_KMOD_BATMAN_ADV_DAT),y,n) \
 	REVISION="" all
 
 MAKE_BATCTL_ARGS += \
@@ -108,11 +110,11 @@ define Build/Clean
 endef
 
 define KernelPackage/batman-adv/install
-	$(INSTALL_DIR) $(1)/etc/config $(1)/etc/hotplug.d/net $(1)/lib/batman-adv $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/etc/config $(1)/etc/hotplug.d/net $(1)/etc/hotplug.d/iface $(1)/lib/batman-adv $(1)/usr/sbin $(1)/lib/netifd/proto
 	$(INSTALL_DATA) ./files/etc/config/batman-adv $(1)/etc/config
 	$(INSTALL_DATA) ./files/lib/batman-adv/config.sh $(1)/lib/batman-adv
 	$(INSTALL_BIN) ./files/etc/hotplug.d/net/99-batman-adv $(1)/etc/hotplug.d/net
-	$(INSTALL_BIN) ./files/usr/sbin/batman-adv $(1)/usr/sbin
+	$(INSTALL_BIN) ./files/lib/netifd/proto/batadv.sh $(1)/lib/netifd/proto
 	$(BATCTL_INSTALL)
 endef
 

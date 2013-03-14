@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2012 OpenWrt.org
+# Copyright (C) 2012-2013 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freecwmp
-PKG_VERSION:=2012-06-11
+PKG_VERSION:=2013-02-18
 PKG_RELEASE=$(PKG_SOURCE_VERSION)
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://dev.freecwmp.org/freecwmp
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=dffa3fa23842e5dc3e69228692a6087bf22bf68e
+PKG_SOURCE_VERSION:=c1a9c1883189fec77cba32c46bc26658ca3f8123
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
 
 PKG_FIXUP:=autoreconf
@@ -23,7 +23,7 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_FREECWMP_ACS_MULTI \
 	CONFIG_FREECWMP_ACS_HDM \
 	CONFIG_FREECWMP_DEBUG \
-	CONFIG_FREECWMP_DEVEL_DEBUG
+	CONFIG_FREECWMP_DEVEL
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 
@@ -33,7 +33,7 @@ define Package/freecwmp/Default
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=CWMP client
-  DEPENDS:=+libuci +libubox +libmicroxml +shflags
+  DEPENDS:=+libfreecwmp +libuci +libubox +libubus +libmicroxml +shflags
 endef
 
 define Package/freecwmp/description
@@ -72,8 +72,10 @@ TARGET_LDFLAGS += \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 CONFIGURE_ARGS += \
+	--with-libfreecwmp-include-path=$(STAGING_DIR)/usr/include \
 	--with-uci-include-path=$(STAGING_DIR)/usr/include \
-	--with-libubox-include-path=$(STAGING_DIR)/usr/include
+	--with-libubox-include-path=$(STAGING_DIR)/usr/include \
+	--with-libubus-include-path=$(STAGING_DIR)/usr/include
 
 ifeq ($(BUILD_VARIANT),zstream)
 CONFIGURE_ARGS += \
@@ -101,9 +103,9 @@ CONFIGURE_ARGS += \
 	--enable-debug
 endif
 
-ifeq ($(CONFIG_FREECWMP_DEVEL_DEBUG),y)
+ifeq ($(CONFIG_FREECWMP_DEVEL),y)
 CONFIGURE_ARGS += \
-	--enable-devel-debug
+	--enable-devel
 endif
 
 define Package/freecwmp-$(BUILD_VARIANT)/conffiles

@@ -10,14 +10,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=boost
-PKG_VERSION:=1_49_0
+PKG_VERSION:=1_51_0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/boost
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)
 HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/$(PKG_NAME)_$(PKG_VERSION)
-PKG_MD5SUM:=e0defc8c818e4f1c5bbb29d0292b76ca
+PKG_MD5SUM:=6a1f32d902203ac70fbec78af95b3cf8
 
 PKG_BUILD_DEPENDS:=boost/host
 PKG_BUILD_PARALLEL:=1
@@ -116,7 +116,7 @@ endef
 define Package/boost-python
   $(call Package/boost/Default)
   TITLE+= (python)
-  DEPENDS+= +python
+  DEPENDS+= +PACKAGE_boost-python:python
 endef
 
 define Package/boost-random
@@ -152,6 +152,7 @@ endef
 define Package/boost-thread
   $(call Package/boost/Default)
   TITLE+= (thread)
+  DEPENDS+= +boost-system +boost-chrono
 endef
 
 define Package/boost-timer
@@ -184,16 +185,16 @@ CONFIGURE_PREFIX:=$(PKG_INSTALL_DIR)
 TARGET_LDFLAGS += -pthread -lrt
 
 define Build/Compile
-	( cd $(PKG_BUILD_DIR) ; \
-		echo "using gcc : : $(GNU_TARGET_NAME)-gcc : <compileflags>\"$(TARGET_CFLAGS)\" <cxxflags>\"$(TARGET_CXXFLAGS)\" <linkflags>\"$(TARGET_LDFLAGS)\" ;" > tools/build/v2/site-config.jam ; \
+	+( cd $(PKG_BUILD_DIR) ; \
+		echo "using gcc : $(ARCH) : $(GNU_TARGET_NAME)-gcc : <compileflags>\"$(TARGET_CFLAGS)\" <cxxflags>\"$(TARGET_CXXFLAGS)\" <linkflags>\"$(TARGET_LDFLAGS)\" ;" > tools/build/v2/user-config.jam ; \
 		$(if $(CONFIG_PACKAGE_boost-python), \
 			echo "using python : : $(STAGING_DIR_ROOT)/usr/bin/python :	$(STAGING_DIR)/usr/include/python2.7/ ;" >> \
-				tools/build/v2/site-config.jam; \
+				tools/build/v2/user-config.jam; \
 		) \
 		bjam \
 			'-sBUILD=release <optimization>space <inlining>on <debug-symbols>off' \
 			$(filter -j%,$(PKG_JOBS)) \
-			--toolset=gcc --build-type=minimal --layout=system \
+			--toolset=gcc-$(ARCH) --build-type=minimal --layout=system \
 			--disable-long-double \
 			$(CONFIGURE_ARGS) \
 			$(if $(CONFIG_PACKAGE_boost-chrono),,--without-chrono) \

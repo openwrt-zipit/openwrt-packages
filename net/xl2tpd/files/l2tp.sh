@@ -13,8 +13,6 @@ proto_l2tp_init_config() {
 	proto_config_add_string "password"
 	proto_config_add_string "keepalive"
 	proto_config_add_string "pppd_options"
-	proto_config_add_boolean "defaultroute"
-	proto_config_add_boolean "peerdns"
 	proto_config_add_boolean "ipv6"
 	proto_config_add_int "mtu"
 	proto_config_add_string "server"
@@ -45,14 +43,8 @@ proto_l2tp_setup() {
 		/etc/init.d/xl2tpd start
 	fi
 
-	json_get_vars ipv6 peerdns defaultroute demand keepalive username password pppd_options
+	json_get_vars ipv6 demand keepalive username password pppd_options
 	[ "$ipv6" = 1 ] || ipv6=""
-	[ "$peerdns" = 0 ] && peerdns="" || peerdns="1"
-	if [ "$defaultroute" = 1 ]; then
-		defaultroute="defaultroute replacedefaultroute";
-	else
-		defaultroute="nodefaultroute"
-	fi
 	if [ "${demand:-0}" -gt 0 ]; then
 		demand="precompiled-active-filter /etc/ppp/filter demand idle $demand"
 	else
@@ -66,9 +58,9 @@ proto_l2tp_setup() {
 
 	mkdir -p /tmp/l2tp
 
-	echo ${keepalive:+lcp-echo-interval $interval lcp-echo-failure ${keepalive%%[, ]*}} > "${optfile}"
-	echo "${peerdns:+usepeerdns}" >> "${optfile}"
-	echo "$defaultroute" >> "${optfile}"
+	echo "${keepalive:+lcp-echo-interval $interval lcp-echo-failure ${keepalive%%[, ]*}}" > "${optfile}"
+	echo "usepeerdns" >> "${optfile}"
+	echo "nodefaultroute" >> "${optfile}"
 	echo "${username:+user \"$username\" password \"$password\"}" >> "${optfile}"
 	echo "ipparam \"$config\"" >> "${optfile}"
 	echo "ifname \"l2tp-$config\"" >> "${optfile}"
@@ -78,7 +70,7 @@ proto_l2tp_setup() {
 	echo "ipv6-down-script /lib/netifd/ppp-down" >> "${optfile}"
 	# Don't wait for LCP term responses; exit immediately when killed.
 	echo "lcp-max-terminate 0" >> "${optfile}"
-	echo "${ipv6} ${pppd_options}" >> "${optfile}"
+	echo "${ipv6:++ipv6} ${pppd_options}" >> "${optfile}"
 	echo "${mtu:+mtu $mtu mru $mtu}" >> "${optfile}"
 
 	xl2tpd-control add l2tp-${config} pppoptfile=${optfile} lns=${server} redial=yes redial timeout=20

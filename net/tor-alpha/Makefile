@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tor-alpha
-PKG_VERSION:=0.2.3.17-beta
+PKG_VERSION:=0.2.4.6-alpha
 PKG_RELEASE:=1
 
 PKG_SOURCE:=tor-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://www.torproject.org/dist \
 	https://archive.torproject.org/tor-package-archive
-PKG_MD5SUM:=d07158942df1c9e869a25a8a53446862
+PKG_MD5SUM:=49a70a45e082739a1ed484d5f9d8759b
 
 PKG_BUILD_DEPENDS:=libminiupnpc libnatpmp
 PKG_BUILD_DIR:=$(BUILD_DIR)/tor-$(PKG_VERSION)
@@ -39,7 +39,7 @@ endef
 define Package/tor-alpha
 $(call Package/tor-alpha/Default)
   TITLE:=An anonymous Internet communication system
-  DEPENDS:=+libevent2 +libevent2-openssl +libpthread +librt
+  DEPENDS:=+libevent2 +libopenssl +libpthread +librt +SSP_SUPPORT:libssp
 endef
 
 define Package/tor-alpha/description
