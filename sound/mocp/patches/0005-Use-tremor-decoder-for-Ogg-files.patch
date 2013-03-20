@@ -1,0 +1,99 @@
+From 24a41a1390b060c8286accb97385229fc25e4ca1 Mon Sep 17 00:00:00 2001
+From: Vasily Khoruzhick <anarsoul@gmail.com>
+Date: Wed, 20 Mar 2013 15:04:34 +0300
+Subject: [PATCH 5/5] Use tremor decoder for Ogg files
+
+---
+ configure                       | 16 ++++++++--------
+ configure.in                    |  2 +-
+ decoder_plugins/vorbis/vorbis.c |  6 +++---
+ 3 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/configure b/configure
+index bd0e677..7282fb2 100755
+--- a/configure
++++ b/configure
+@@ -20621,12 +20621,12 @@ if test -n "$PKG_CONFIG"; then
+         pkg_cv_OGG_VORBIS_CFLAGS="$OGG_VORBIS_CFLAGS"
+     else
+         if test -n "$PKG_CONFIG" && \
+-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"ogg >= 1.0 vorbis >= 1.0 vorbisfile >= 1.0\"") >&5
+-  ($PKG_CONFIG --exists --print-errors "ogg >= 1.0 vorbis >= 1.0 vorbisfile >= 1.0") 2>&5
++    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \" vorbisidec >= 1.0 \"") >&5
++  ($PKG_CONFIG --exists --print-errors "vorbisidec >= 1.0 ") 2>&5
+   ac_status=$?
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+   (exit $ac_status); }; then
+-  pkg_cv_OGG_VORBIS_CFLAGS=`$PKG_CONFIG --cflags "ogg >= 1.0 vorbis >= 1.0 vorbisfile >= 1.0" 2>/dev/null`
++  pkg_cv_OGG_VORBIS_CFLAGS=`$PKG_CONFIG --cflags "vorbisidec >= 1.0 " 2>/dev/null`
+ else
+   pkg_failed=yes
+ fi
+@@ -20639,12 +20639,12 @@ if test -n "$PKG_CONFIG"; then
+         pkg_cv_OGG_VORBIS_LIBS="$OGG_VORBIS_LIBS"
+     else
+         if test -n "$PKG_CONFIG" && \
+-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"ogg >= 1.0 vorbis >= 1.0 vorbisfile >= 1.0\"") >&5
+-  ($PKG_CONFIG --exists --print-errors "ogg >= 1.0 vorbis >= 1.0 vorbisfile >= 1.0") 2>&5
++    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"vorbisidec >= 1.0 \"") >&5
++  ($PKG_CONFIG --exists --print-errors "vorbisidec >= 1.0 ") 2>&5
+   ac_status=$?
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+   (exit $ac_status); }; then
+-  pkg_cv_OGG_VORBIS_LIBS=`$PKG_CONFIG --libs "ogg >= 1.0 vorbis >= 1.0 vorbisfile >= 1.0" 2>/dev/null`
++  pkg_cv_OGG_VORBIS_LIBS=`$PKG_CONFIG --libs "vorbisidec >= 1.0 " 2>/dev/null`
+ else
+   pkg_failed=yes
+ fi
+@@ -20663,9 +20663,9 @@ else
+         _pkg_short_errors_supported=no
+ fi
+         if test $_pkg_short_errors_supported = yes; then
+-	        OGG_VORBIS_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "ogg >= 1.0 vorbis >= 1.0 vorbisfile >= 1.0"`
++	        OGG_VORBIS_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "vorbisidec >= 1.0 "`
+         else
+-	        OGG_VORBIS_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "ogg >= 1.0 vorbis >= 1.0 vorbisfile >= 1.0"`
++	        OGG_VORBIS_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "vorbisidec >= 1.0 "`
+         fi
+ 	# Put the nasty error message in config.log where it belongs
+ 	echo "$OGG_VORBIS_PKG_ERRORS" >&5
+diff --git a/configure.in b/configure.in
+index 7357fa9..aabe6ab 100644
+--- a/configure.in
++++ b/configure.in
+@@ -350,7 +350,7 @@ AC_ARG_WITH(vorbis, AS_HELP_STRING(--without-vorbis,
+ if test "x$with_vorbis" != "xno"
+ then
+ 	PKG_CHECK_MODULES(OGG_VORBIS,
+-			  [ogg >= 1.0 vorbis >= 1.0 vorbisfile >= 1.0],
++			  [vorbisidec >= 1.0],
+ 			  [AC_SUBST(OGG_VORBIS_LIBS)
+ 			  AC_SUBST(OGG_VORBIS_CFLAGS)
+ 			  DECODER_PLUGINS="$DECODER_PLUGINS vorbis"],
+diff --git a/decoder_plugins/vorbis/vorbis.c b/decoder_plugins/vorbis/vorbis.c
+index ee04ef1..a990e90 100644
+--- a/decoder_plugins/vorbis/vorbis.c
++++ b/decoder_plugins/vorbis/vorbis.c
+@@ -18,8 +18,8 @@
+ #include <stdio.h>
+ #include <errno.h>
+ #include <assert.h>
+-#include <vorbis/vorbisfile.h>
+-#include <vorbis/codec.h>
++#include <tremor/ivorbisfile.h>
++#include <tremor/ivorbiscodec.h>
+ 
+ #define DEBUG
+ 
+@@ -309,7 +309,7 @@ static int vorbis_decode (void *prv_data, char *buf, int buf_len,
+ 	decoder_error_clear (&data->error);
+ 
+ 	while (1) {
+-		ret = ov_read(&data->vf, buf, buf_len, 0, 2, 1,
++		ret = ov_read(&data->vf, buf, buf_len,
+ 				&current_section);
+ 		if (ret == 0)
+ 			return 0;
+-- 
+1.8.2
+
