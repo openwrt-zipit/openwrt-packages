@@ -1,0 +1,88 @@
+From fd0e7183c605b33caa9e75bc7009708f0a7cbc96 Mon Sep 17 00:00:00 2001
+From: Vasily Khoruzhick <anarsoul@gmail.com>
+Date: Tue, 19 Mar 2013 18:06:29 +0300
+Subject: [PATCH 4/4] Fix build with ffmpeg-0.11
+
+---
+ decoder_plugins/ffmpeg/ffmpeg.c | 33 +++++++++++++++++----------------
+ 1 file changed, 17 insertions(+), 16 deletions(-)
+
+diff --git a/decoder_plugins/ffmpeg/ffmpeg.c b/decoder_plugins/ffmpeg/ffmpeg.c
+index c7d3e33..dd0ced4 100644
+--- a/decoder_plugins/ffmpeg/ffmpeg.c
++++ b/decoder_plugins/ffmpeg/ffmpeg.c
+@@ -42,7 +42,6 @@
+ 
+ struct ffmpeg_data
+ {
+-	AVFormatParameters ap;
+ 	AVFormatContext *ic;
+ 	AVCodecContext *enc;
+ 	AVCodec *codec;
+@@ -65,13 +64,10 @@ static void ffmpeg_info (const char *file_name,
+ 		struct file_tags *info,
+ 		const int tags_sel)
+ {
+-	AVFormatParameters ap;
+ 	AVFormatContext *ic;
+ 	int err;
+ 	
+-	memset (&ap, 0, sizeof(ap));
+-
+-	if ((err = av_open_input_file(&ic, file_name, NULL, 0, &ap)) < 0) {
++	if ((err = av_open_input_file(&ic, file_name, NULL, 0, NULL)) < 0) {
+ 		logit ("av_open_input_file() failed (%d)", err);
+ 		return;
+ 	}
+@@ -81,14 +77,20 @@ static void ffmpeg_info (const char *file_name,
+ 	}
+ 
+ 	if (tags_sel & TAGS_COMMENTS) {
+-		if (ic->track != 0)
+-			info->track = ic->track;
+-		if (ic->title[0] != 0)
+-			info->title = xstrdup (ic->title);
+-		if (ic->author[0] != 0)
+-			info->artist = xstrdup (ic->author);
+-		if (ic->album[0] != 0)
+-			info->album = xstrdup (ic->album);
++		AVDictionaryEntry *entry;
++
++		entry = av_dict_get (ic->metadata, "track", NULL, 0);
++		if (entry && entry->value && entry->value[0])
++			info->track = atoi (entry->value);
++		entry = av_dict_get (ic->metadata, "title", NULL, 0);
++		if (entry && entry->value && entry->value[0])
++			info->title = xstrdup (entry->value);
++		entry = av_dict_get (ic->metadata, "artist", NULL, 0);
++		if (entry && entry->value && entry->value[0])
++			info->artist = xstrdup (entry->value);
++		entry = av_dict_get (ic->metadata, "album", NULL, 0);
++		if (entry && entry->value && entry->value[0])
++			info->album = xstrdup (entry->value);
+ 	}
+ 
+ 	if (tags_sel & TAGS_TIME)
+@@ -107,9 +109,8 @@ static void *ffmpeg_open (const char *file)
+ 	data->ok = 0;
+ 
+ 	decoder_error_init (&data->error);
+-	memset (&data->ap, 0, sizeof(data->ap));
+ 
+-	err = av_open_input_file (&data->ic, file, NULL, 0, &data->ap);
++	err = av_open_input_file (&data->ic, file, NULL, 0, NULL);
+ 	if (err < 0) {
+ 		decoder_error (&data->error, ERROR_FATAL, 0, "Can't open file");
+ 		return data;
+@@ -127,7 +128,7 @@ static void *ffmpeg_open (const char *file)
+ 	av_read_play (data->ic);
+ 	for (i = 0; i < data->ic->nb_streams; i++) {
+ 		data->enc = data->ic->streams[i]->codec;
+-		if (data->enc->codec_type == CODEC_TYPE_AUDIO) {
++		if (data->enc->codec_type == AVMEDIA_TYPE_AUDIO) {
+ 			audio_index = i;
+ 			break;
+ 		}
+-- 
+1.8.2
+

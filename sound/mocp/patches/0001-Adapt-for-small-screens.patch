@@ -1,14 +1,13 @@
-From 45d120fbc821417bb46264116aeffbf9e0ac8d8f Mon Sep 17 00:00:00 2001
+From ddf572ef839a05d3476dcefc0066eb7219ef9087 Mon Sep 17 00:00:00 2001
 From: Vasily Khoruzhick <anarsoul@gmail.com>
 Date: Sat, 11 Feb 2012 23:37:22 +0300
-Subject: [PATCH 1/3] Adapt for small screens
+Subject: [PATCH 1/4] Adapt for small screens
 
 Signed-off-by: Vasily Khoruzhick <anarsoul@gmail.com>
 ---
- .interface_elements.c.swp |  Bin 106496 -> 110592 bytes
- interface_elements.c      |   28 ++++++++++++++++------------
- options.c                 |    6 +++---
- 3 files changed, 19 insertions(+), 15 deletions(-)
+ interface_elements.c | 28 ++++++++++++++++------------
+ options.c            |  6 +++---
+ 2 files changed, 19 insertions(+), 15 deletions(-)
 
 diff --git a/interface_elements.c b/interface_elements.c
 index 715971c..1df9d26 100644
@@ -126,5 +125,5 @@ index 2fa3d36..5d0572d 100644
  	option_add_str ("XTermTheme", NULL);
  	option_add_str ("ForceTheme", NULL); /* Used when -T is set */
 -- 
-1.7.9
+1.8.2
 

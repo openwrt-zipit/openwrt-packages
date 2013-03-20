@@ -1,12 +1,12 @@
-From 33fac71a1262cc0867482b6600739746c043d7a5 Mon Sep 17 00:00:00 2001
+From e77db458d1f00b50c8bf5554c77225d4f0593d64 Mon Sep 17 00:00:00 2001
 From: Vasily Khoruzhick <anarsoul@gmail.com>
 Date: Sun, 12 Feb 2012 00:53:50 +0300
-Subject: [PATCH 3/3] Prefer id3v2 over id3v1
+Subject: [PATCH 3/4] Prefer id3v2 over id3v1
 
 Signed-off-by: Vasily Khoruzhick <anarsoul@gmail.com>
 ---
- decoder_plugins/mp3/mp3.c |   26 ++++++++++++++++++++++++--
- 1 files changed, 24 insertions(+), 2 deletions(-)
+ decoder_plugins/mp3/mp3.c | 26 ++++++++++++++++++++++++--
+ 1 file changed, 24 insertions(+), 2 deletions(-)
 
 diff --git a/decoder_plugins/mp3/mp3.c b/decoder_plugins/mp3/mp3.c
 index d78988f..35dfe22 100644
@@ -62,5 +62,5 @@ index d78988f..35dfe22 100644
  
  				comm = (char *)id3_ucs4_latin1duplicate (ucs4);
 -- 
-1.7.9
+1.8.2
 
