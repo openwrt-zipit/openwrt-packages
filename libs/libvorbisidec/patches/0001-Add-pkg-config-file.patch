@@ -1,0 +1,76 @@
+From 14b62b40c8ad4fe6956ba3def15ecca06b7a9a45 Mon Sep 17 00:00:00 2001
+From: Vasily Khoruzhick <anarsoul@gmail.com>
+Date: Wed, 20 Mar 2013 15:48:51 +0300
+Subject: [PATCH] Add pkg-config file
+
+---
+ Makefile.am      |  5 +++++
+ configure.in     |  4 ++--
+ vorbisidec.pc.in | 13 +++++++++++++
+ 3 files changed, 20 insertions(+), 2 deletions(-)
+ create mode 100644 vorbisidec.pc.in
+
+diff --git a/Makefile.am b/Makefile.am
+index d14081f..20742df 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -2,6 +2,9 @@ AUTOMAKE_OPTIONS = foreign
+ 
+ INCLUDES = -I./
+ 
++pkgconfigdir = $(libdir)/pkgconfig
++pkgconfig_DATA = vorbisidec.pc
++
+ lib_LTLIBRARIES = libvorbisidec.la
+ 
+ libvorbisidec_la_SOURCES = mdct.c block.c window.c \
+@@ -27,6 +30,8 @@ includedir = $(prefix)/include/tremor
+ 
+ include_HEADERS = ivorbiscodec.h ivorbisfile.h ogg.h os_types.h config_types.h
+ 
++EXTRA_DIST = vorbisidec.pc.in
++
+ example:
+ 	-ln -fs . vorbis
+ 	$(MAKE) ivorbisfile_example
+diff --git a/configure.in b/configure.in
+index 2b44ee4..2bc634f 100644
+--- a/configure.in
++++ b/configure.in
+@@ -9,7 +9,7 @@ AC_INIT(mdct.c)
+ AC_CANONICAL_HOST
+ AC_CANONICAL_TARGET
+ 
+-AM_CONFIG_HEADER([config.h])
++AC_CONFIG_HEADERS([config.h])
+ 
+ AM_INIT_AUTOMAKE(libvorbisidec,1.2.0)
+ 
+@@ -128,4 +128,4 @@ AC_SUBST(LIBS)
+ AC_SUBST(DEBUG)
+ AC_SUBST(PROFILE)
+ 
+-AC_OUTPUT(Makefile Version_script)
++AC_OUTPUT(Makefile Version_script vorbisidec.pc)
+diff --git a/vorbisidec.pc.in b/vorbisidec.pc.in
+new file mode 100644
+index 0000000..4d70b77
+--- /dev/null
++++ b/vorbisidec.pc.in
+@@ -0,0 +1,13 @@
++# libvorbisidec pkg-config source file
++
++prefix=@prefix@
++exec_prefix=@exec_prefix@
++libdir=@libdir@
++includedir=@includedir@
++
++Name: vorbisidec
++Description: vorbisidec is the integer Ogg Vorbis library
++Version: @VERSION@
++Conflicts:
++Libs: -L${libdir} -lvorbisidec -lm
++Cflags: -I${includedir}
+-- 
+1.8.2
+
