@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/mutt
   SECTION:=mail
   CATEGORY:=Mail
-  DEPENDS:=+libopenssl +libncursesw
+  DEPENDS:=+libopenssl +libncursesw +tokyocabinet
   TITLE:=Console mail client
   URL:=http://www.mutt.org/
 endef
