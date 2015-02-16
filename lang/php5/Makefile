@@ -33,7 +33,7 @@ PHP5_MODULES = \
 	mbstring mcrypt mysql mysqli \
 	openssl \
 	pcntl pdo pdo-mysql pdo-pgsql pdo-sqlite pgsql \
-	session shmop simplexml soap sockets sqlite sqlite3 sysvmsg sysvsem sysvshm \
+	session shmop simplexml soap sockets sqlite sqlite3 sybase-ct sysvmsg sysvsem sysvshm \
 	tokenizer \
 	xml xmlreader xmlwriter zip \
 
@@ -382,6 +382,13 @@ else
   CONFIGURE_ARGS+= --without-sqlite3
 endif
 
+ifneq ($(SDK)$(CONFIG_PACKAGE_php5-mod-sybase-ct),)
+  PKG_BUILD_DEPENDS+=+freetds
+  CONFIGURE_ARGS+= --with-sybase-ct=shared,"$(STAGING_DIR)/usr"
+else
+  CONFIGURE_ARGS+= --without-sybase-ct
+endif
+
 ifneq ($(SDK)$(CONFIG_PACKAGE_php5-mod-sysvmsg),)
   CONFIGURE_ARGS+= --enable-sysvmsg=shared
 else
@@ -562,6 +569,7 @@ $(eval $(call BuildModule,soap,SOAP,+@PHP5_LIBXML +PACKAGE_php5-mod-soap:libxml2
 $(eval $(call BuildModule,sockets,Sockets))
 $(eval $(call BuildModule,sqlite,SQLite 2.x,+PACKAGE_php5-mod-sqlite:libsqlite2))
 $(eval $(call BuildModule,sqlite3,SQLite3,+PACKAGE_php5-mod-sqlite3:libsqlite3 +PACKAGE_php5-mod-sqlite3:libpthread))
+$(eval $(call BuildModule,sybase-ct,Sybase,+PACKAGE_php5-mod-sybase-ct:freetds))
 $(eval $(call BuildModule,sysvmsg,System V messages))
 $(eval $(call BuildModule,sysvsem,System V shared memory))
 $(eval $(call BuildModule,sysvshm,System V semaphore))
