@@ -27,7 +27,7 @@ define Package/libsdl
   CATEGORY:=Libraries
   TITLE:=Simple DirectMedia Layer
   URL:=http://www.libsdl.org
-  DEPENDS:=+directfb +zlib +libpthread +AUDIO_SUPPORT:alsa-lib
+  DEPENDS:=+zlib +libpthread +AUDIO_SUPPORT:alsa-lib
 endef
 
 define Package/libsdl/description
@@ -68,7 +68,7 @@ CONFIGURE_ARGS+= \
 	--disable-nanox \
 	--disable-video-x11 \
 	--enable-x11-shared \
-	--enable-dga \
+	--disable-dga \
 	--enable-video-dga \
 	--enable-video-x11-dgamouse \
 	--enable-video-x11-vm \
@@ -80,7 +80,7 @@ CONFIGURE_ARGS+= \
 	--disable-video-carbon \
 	--disable-video-cocoa \
 	--enable-video-fbcon \
-	--enable-video-directfb \
+	--disable-video-directfb \
 	--disable-video-ps2gs \
 	--disable-video-ps3 \
 	--disable-video-ggi \
