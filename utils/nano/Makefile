@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2010 OpenWrt.org
+# Copyright (C) 2007-2016 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nano
-PKG_VERSION:=2.2.6
+PKG_VERSION:=2.7.0
 PKG_RELEASE:=1
+PKG_LICENSE:=GPL-3.0+
+PKG_LICENSE_FILES:=COPYING
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.nano-editor.org/dist/v2.2
-PKG_MD5SUM:=03233ae480689a008eb98feb1b599807
+PKG_SOURCE_URL:=@GNU/nano
+PKG_MD5SUM:=0805c5b8c75d4fde053e4b1431270f91
 
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
@@ -26,7 +28,7 @@ define Package/nano
   CATEGORY:=Utilities
   TITLE:=An enhanced clone of the Pico text editor
   URL:=http://www.nano-editor.org/
-  MAINTAINER:=Bernhard Loos <bernhardloos@googlemail.com>
+  MAINTAINER:=Jonathan Bennett <JBennett@incomsystems.biz>
   DEPENDS:=+libncurses
 endef
 
@@ -36,13 +38,13 @@ define Package/nano/description
 endef
 
 CONFIGURE_ARGS += \
-	--enable-tiny \
 	--disable-glibtest \
 	--disable-utf8 \
-	--without-slang \
+	--disable-libmagic \
+        --without-slang \
 
 CONFIGURE_VARS += \
-	ac_cv_header_regex_h=no \
+	ac_cv_header_regex_h=yes \
 
 define Package/nano/install
 	$(INSTALL_DIR) $(1)/usr/bin
@@ -50,3 +52,4 @@ define Package/nano/install
 endef
 
 $(eval $(call BuildPackage,nano))
+
