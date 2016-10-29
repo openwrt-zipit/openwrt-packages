@@ -18,6 +18,9 @@ PKG_MD5SUM:=b9d6102fbbd0b68040bb77023ed30c0c
 PKG_INSTALL:=1
 PKG_MAINTAINER:=Ted Hess <thess@kitschensync.net>
 
+PKG_FIXUP:=autoreconf
+PKG_FIXUP:=gettext-version
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/alsa-utils
@@ -56,13 +59,7 @@ define Package/alsa-utils/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/amixer $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/alsamixer $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/aplay $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/arecord $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/alsactl $(1)/usr/sbin/
-
-	$(INSTALL_DIR) $(1)/usr/share/alsa/init
-	$(INSTALL_DATA) \
-	    $(PKG_INSTALL_DIR)/usr/share/alsa/init/* \
-	    $(1)/usr/share/alsa/init/
+	$(LN) /usr/bin/aplay $(1)/usr/bin/arecord
 endef
 
 define Package/alsa-utils-seq/install
