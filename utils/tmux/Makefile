@@ -10,10 +10,20 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=tmux
 PKG_VERSION:=2.2
 PKG_RELEASE:=1
+PKG_REV:=baf155022707fea86cdbd3da8e3e4f1e27c449ec
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=https://github.com/tmux/tmux/releases/download/$(PKG_VERSION)
-PKG_MD5SUM:=bd95ee7205e489c62c616bb7af040099
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_REV).tar.gz
+PKG_SOURCE_URL:=git://github.com/tmux/tmux.git
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_VERSION:=$(PKG_REV)
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_FIXUP:=autoreconf
+
+#PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+#PKG_SOURCE_URL:=https://github.com/tmux/tmux/releases/download/$(PKG_VERSION)
+#PKG_MD5SUM:=bd95ee7205e489c62c616bb7af040099
+
 PKG_MAINTAINER:=Maxim Storchak <m.storchak@gmail.com>
 
 PKG_LICENSE:=ISC

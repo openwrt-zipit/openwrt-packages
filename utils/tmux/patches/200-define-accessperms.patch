@@ -1,0 +1,13 @@
+--- a/server.c.orig	2016-08-10 08:10:35.655790785 -0500
++++ b/server.c	2016-08-10 08:09:24.891789359 -0500
+@@ -36,6 +36,10 @@
+ 
+ #include "tmux.h"
+ 
++#ifndef ACCESSPERMS
++#define ACCESSPERMS (S_IRWXU|S_IRWXG|S_IRWXO)
++#endif
++
+ /*
+  * Main server functions.
+  */
