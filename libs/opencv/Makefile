@@ -21,6 +21,7 @@ PKG_LICENSE_FILES:=LICENSE
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/cmake.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/opencv/Default/description
  OpenCV (Open Source Computer Vision Library) is an open source computer
@@ -37,12 +38,20 @@ define Package/opencv
   TITLE:=OpenCV
   URL:=http://opencv.org/
   MAINTAINER:=WRTnode Team <pub@wrtnode.com>
-  DEPENDS:=+libpthread +librt +libstdcpp +zlib +libjpeg
+  DEPENDS:=$(INTL_DEPENDS) +libpthread +librt +libstdcpp +zlib +libjpeg +glib2
 endef
 
 PKG_INSTALL:=1
 
-CMAKE_OPTIONS += -DBUILD_opencv_gpu:BOOL=OFF \
+TARGET_LDFLAGS += \
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+	$(INTL_LDFLAGS)
+
+CMAKE_OPTIONS += \
+	-DCMAKE_EXE_LINKER_FLAGS:STRING="$(TARGET_LDFLAGS)" \
+	-DCMAKE_MODULE_LINKER_FLAGS:STRING="$(TARGET_LDFLAGS)" \
+	-DCMAKE_SHARED_LINKER_FLAGS:STRING="$(TARGET_LDFLAGS)" \
+	-DBUILD_opencv_gpu:BOOL=OFF \
 	-DWITH_1394:BOOL=OFF -DBUILD_opencv_stitching:BOOL=OFF \
 	-DBUILD_opencv_superres:BOOL=OFF -DBUILD_opencv_ts:BOOL=OFF \
 	-DBUILD_opencv_highgui:BOOL=OFF \
