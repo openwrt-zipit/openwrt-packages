@@ -108,13 +108,14 @@ SCONS_OPTIONS += \
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/gps.h $(1)/usr/include/
+		$(CP) $(PKG_INSTALL_DIR)/usr/include/gps.h $(1)/usr/include/
+		$(CP) $(PKG_BUILD_DIR)/gpsdclient.h $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgps*.so* $(1)/usr/lib/
+		$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgps*.so* $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
-	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libgps*.pc \
-		$(1)/usr/lib/pkgconfig/
+		$(CP) \
+			$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libgps*.pc \
+			$(1)/usr/lib/pkgconfig/
 endef
 
 define Package/gpsd/install
