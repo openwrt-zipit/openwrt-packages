@@ -1,0 +1,32 @@
+--- opus-1.1/celt/arm/kiss_fft_armv5e.h~	2013-11-26 20:21:00.000000000 -0500
++++ opus-1.1/celt/arm/kiss_fft_armv5e.h	2016-10-24 18:59:01.251510365 -0400
+@@ -44,8 +44,8 @@
+         int mr1__; \
+         int mr2__; \
+         int mi__; \
+-        long long aval__; \
+         int bval__; \
++        register long long aval__ asm ("r6");	\
+         __asm__( \
+             "#C_MUL\n\t" \
+             "ldrd %[aval], %H[aval], %[ap]\n\t" \
+@@ -69,8 +69,8 @@
+         int mr1__; \
+         int mr2__; \
+         int mi__; \
+-        long long aval__; \
+         int bval__; \
++        register long long aval__ asm ("r6");	\
+         __asm__( \
+             "#C_MUL4\n\t" \
+             "ldrd %[aval], %H[aval], %[ap]\n\t" \
+@@ -94,8 +94,8 @@
+         int mr__; \
+         int mi1__; \
+         int mi2__; \
+-        long long aval__; \
+         int bval__; \
++        register long long aval__ asm ("r6");	\
+         __asm__( \
+             "#C_MULC\n\t" \
+             "ldrd %[aval], %H[aval], %[ap]\n\t" \
