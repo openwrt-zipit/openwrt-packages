@@ -1,0 +1,107 @@
+From 163bd7a0352cef4e3890e5d10e46901545ba0497 Mon Sep 17 00:00:00 2001
+From: Joe Honold <mozzwald@gmail.com>
+Date: Sun, 17 Jul 2016 22:48:38 -0500
+Subject: [PATCH] Make libsalsa work with alsa-utils 1.1.0
+
+---
+ configure.ac    |  1 +
+ src/Makefile.am |  5 ++++-
+ src/asoundef.h  | 20 ++++++++++++++++++++
+ src/pcm.h       |  2 ++
+ 4 files changed, 27 insertions(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index 69a0ddf..981d2ab 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -178,6 +178,7 @@ AM_CONDITIONAL(BUILD_TIMER, test "$timer" = "yes")
+ AM_CONDITIONAL(BUILD_CONF, test "$sndconf" = "yes")
+ AM_CONDITIONAL(BUILD_SEQ, test "$sndseq" = "yes")
+ AM_CONDITIONAL(BUILD_ASYNC, test "$async" = "yes")
++AM_CONDITIONAL(BUILD_OUTBUF, test "$output_buffer" = "yes")
+ 
+ if test "$tlv" = "yes"; then
+   SALSA_HAS_TLV_SUPPORT=1
+diff --git a/src/Makefile.am b/src/Makefile.am
+index d5d04e5..4492b0c 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -26,6 +26,9 @@ endif
+ if BUILD_TIMER
+ libsalsa_la_SOURCES += timer.c
+ endif
++if BUILD_OUTBUF
++libsalsa_la_SOURCES += output_abi.c
++endif
+ 
+ libsalsa_la_LDFLAGS = -version-info 0:1:0 $(SYMFUNCS)
+ libsalsa_la_LIBADD = @SALSA_DEPLIBS@
+@@ -71,7 +74,7 @@ DISTCLEANFILES = asoundlib.h recipe.h version.h
+ 
+ if COMPAT_ABI
+ lib_LTLIBRARIES += libasound.la
+-libasound_la_SOURCES = ctl_abi.c input_abi.c output_abi.c global_abi.c error_abi.c
++libasound_la_SOURCES = ctl_abi.c input_abi.c global_abi.c error_abi.c
+ if BUILD_PCM
+ libasound_la_SOURCES += pcm_abi.c
+ endif
+diff --git a/src/asoundef.h b/src/asoundef.h
+index 6a997bc..3ec4ca8 100644
+--- a/src/asoundef.h
++++ b/src/asoundef.h
+@@ -51,6 +51,18 @@
+ #define IEC958_AES1_CON_MUSICAL_ID	0x05	/* Musical device ID */
+ #define IEC958_AES1_CON_MAGNETIC_MASK	0x07	/* Magnetic device mask */
+ #define IEC958_AES1_CON_MAGNETIC_ID	0x03	/* Magnetic device ID */
++#define IEC958_AES1_CON_MINI_DISC       (IEC958_AES1_CON_LASEROPT_ID|0x48)      /**< Mini-Disc device */
++#define IEC958_AES1_CON_DVD             (IEC958_AES1_CON_LASEROPT_ID|0x18)      /**< DVD device */
++#define IEC958_AES1_CON_DSP             (IEC958_AES1_CON_DIGDIGCONV_ID|0x28)    /**< Digital sound processor */
++#define IEC958_AES1_CON_DCC             (IEC958_AES1_CON_MAGNETIC_ID|0x40)      /**< Digital compact cassette */
++#define IEC958_AES1_CON_MAGNETIC_DISC   (IEC958_AES1_CON_MAGNETIC_ID|0x18)      /**< Magnetic disc digital audio device */
++#define IEC958_AES1_CON_DAB_JAPAN       (IEC958_AES1_CON_BROADCAST1_ID|0x00)    /**< Digital audio broadcast (Japan) */
++#define IEC958_AES1_CON_DAB_EUROPE      (IEC958_AES1_CON_BROADCAST1_ID|0x08)    /**< Digital audio broadcast (Europe) */
++#define IEC958_AES1_CON_DAB_USA         (IEC958_AES1_CON_BROADCAST1_ID|0x60)    /**< Digital audio broadcast (USA) */
++#define IEC958_AES1_CON_SOFTWARE        (IEC958_AES1_CON_BROADCAST1_ID|0x40)    /**< Electronic software delivery */
++#define IEC958_AES1_CON_ADC             (IEC958_AES1_CON_ADC_ID|0x00)   /**< ADC without copyright information */
++#define IEC958_AES1_CON_ADC_COPYRIGHT   (IEC958_AES1_CON_ADC_COPYRIGHT_ID|0x00) /**< ADC with copyright information */
++#define IEC958_AES1_CON_SOLIDMEM_DIGITAL_RECORDER_PLAYER (IEC958_AES1_CON_SOLIDMEM_ID|0x00)     /**< Digital audio recorder and player using solid state memory */
+ #define IEC958_AES1_CON_IEC908_CD	(IEC958_AES1_CON_LASEROPT_ID|0x00)	/* IEC958 CD compatible device */
+ #define IEC958_AES1_CON_NON_IEC908_CD	(IEC958_AES1_CON_LASEROPT_ID|0x08)	/* non-IEC958 CD compatible device */
+ #define IEC958_AES1_CON_PCM_CODER	(IEC958_AES1_CON_DIGDIGCONV_ID|0x00)	/* PCM coder */
+@@ -80,6 +92,14 @@
+ #define IEC958_AES3_CON_FS_44100	(0<<0)	/* 44.1kHz */
+ #define IEC958_AES3_CON_FS_48000	(2<<0)	/* 48kHz */
+ #define IEC958_AES3_CON_FS_32000	(3<<0)	/* 32kHz */
++#define IEC958_AES3_CON_FS_22050        (4<<0)  /**< 22.05kHz */
++#define IEC958_AES3_CON_FS_24000        (6<<0)  /**< 24kHz */
++#define IEC958_AES3_CON_FS_88200        (8<<0)  /**< 88.2kHz */
++#define IEC958_AES3_CON_FS_96000        (10<<0) /**< 96kHz */
++#define IEC958_AES3_CON_FS_176400       (12<<0) /**< 176.4kHz */
++#define IEC958_AES3_CON_FS_192000       (14<<0) /**< 192kHz */
++#define IEC958_AES3_CON_FS_768000       (9<<0)  /**< 768kHz */
++#define IEC958_AES3_CON_FS_NOTID        (1<<0)  /**< sample frequency non indicated */
+ #define IEC958_AES3_CON_CLOCK		(3<<4)	/* mask - clock accuracy */
+ #define IEC958_AES3_CON_CLOCK_1000PPM	(0<<4)	/* 1000 ppm */
+ #define IEC958_AES3_CON_CLOCK_50PPM	(1<<4)	/* 50 ppm */
+diff --git a/src/pcm.h b/src/pcm.h
+index 4281bc7..d335398 100644
+--- a/src/pcm.h
++++ b/src/pcm.h
+@@ -27,6 +27,7 @@
+ 
+ #include "pcm_macros.h"
+ 
++
+ #define snd_pcm_info_alloca(ptr)	__snd_alloca(ptr, snd_pcm_info)
+ #define snd_pcm_hw_params_alloca(ptr)	__snd_alloca(ptr, snd_pcm_hw_params)
+ #define snd_pcm_sw_params_alloca(ptr)	__snd_alloca(ptr, snd_pcm_sw_params)
+@@ -35,5 +36,6 @@
+ #define snd_pcm_subformat_mask_alloca(ptr) \
+ 	__snd_alloca(ptr, snd_pcm_subformat_mask)
+ #define snd_pcm_status_alloca(ptr)	__snd_alloca(ptr, snd_pcm_status)
++#define snd_pcm_abort(ptr) 		{ return snd_pcm_nonblock(ptr, 2); }
+ 
+ #endif /* __ALSA_PCM_H_INC */
+-- 
+2.1.4
+

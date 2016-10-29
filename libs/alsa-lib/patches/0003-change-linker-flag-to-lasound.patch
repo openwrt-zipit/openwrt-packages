@@ -1,0 +1,46 @@
+From ebb17234a5daf3079faea5f45c87ce1cee162607 Mon Sep 17 00:00:00 2001
+From: Joe Honold <mozzwald@gmail.com>
+Date: Sun, 17 Jul 2016 23:21:52 -0500
+Subject: [PATCH] change linker flag to lasound
+
+---
+ alsa.m4    | 4 ++--
+ alsa.pc.in | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/alsa.m4 b/alsa.m4
+index 3b94e30..a47150f 100644
+--- a/alsa.m4
++++ b/alsa.m4
+@@ -52,7 +52,7 @@ if test "$alsa_prefix" != "" ; then
+ fi
+ 
+ dnl add the alsa library
+-ALSA_LIBS="$ALSA_LIBS -lsalsa"
++ALSA_LIBS="$ALSA_LIBS -lasound"
+ LIBS="$ALSA_LIBS $LIBS"
+ AC_MSG_RESULT($ALSA_LIBS)
+ 
+@@ -121,7 +121,7 @@ fi
+ 
+ if test "x$alsa_found" = "xyes" ; then
+    ifelse([$2], , :, [$2])
+-   LIBS=`echo $LIBS | sed 's/-lsalsa//g'`
++   LIBS=`echo $LIBS | sed 's/-lasound//g'`
+    LIBS=`echo $LIBS | sed 's/  //'`
+    LIBS="-lsalsa $LIBS"
+ fi
+diff --git a/alsa.pc.in b/alsa.pc.in
+index f70d82b..96ac741 100644
+--- a/alsa.pc.in
++++ b/alsa.pc.in
+@@ -7,5 +7,5 @@ Name: alsa
+ Description: Small Advanced Linux Sound Architecture (SALSA) - Library
+ Version: @SND_LIB_VERSION@
+ Requires: 
+-Libs: -L${libdir} -lsalsa
++Libs: -L${libdir} -lasound
+ Cflags: -I${includedir}
+-- 
+2.1.4
+

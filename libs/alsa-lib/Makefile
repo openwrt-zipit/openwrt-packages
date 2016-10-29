@@ -9,83 +9,78 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=alsa-lib
 PKG_VERSION:=1.1.0
-PKG_RELEASE:=1
+PKG_REV:=a748e4016db83262ce17fbfea26fed3b853f28bd
+PKG_RELEASE:=2
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=ftp://ftp.alsa-project.org/pub/lib/ \
-		http://alsa.cybermirror.org/lib/
-PKG_MD5SUM:=69515ca73c3c4a212ef45160dea846c1
-PKG_MAINTAINER:=Ted Hess <thess@kitschensync.net>, \
-		Peter Wagner <tripolar@gmx.at>
-
-PKG_LICENSE:=LGPLv2.1 GPLv2
-PKG_LICENSE_FILES:=COPYING aserver/COPYING
+PKG_SOURCE_URL:=git://github.com/tiwai/salsa-lib.git
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_VERSION:=$(PKG_REV)
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
-PKG_USE_MIPS16:=0
-PKG_CHECK_FORMAT_SECURITY:=0
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/alsa-lib
   SECTION:=libs
   CATEGORY:=Libraries
-  TITLE:=ALSA (Advanced Linux Sound Architecture) library
-  URL:=http://www.alsa-project.org/
-  DEPENDS:=@AUDIO_SUPPORT +kmod-sound-core +libpthread +librt
+  TITLE:=SALSA (Advanced Linux Sound Architecture) library
+  URL:=http://www.alsa-project.org/main/index.php/SALSA-Library
 endef
 
 define Package/alsa-lib/description
- This is the library package for alsa, needed by some userspace programs.
- You must have enabled the ALSA support in the kernel.
+  SALSA-Lib is a small, light-weight, hot and spicy version of
+  the ALSA library, mainly for embedded systems with limited
+  resources. The library is designed to be source-level compatible
+  with ALSA library API for limited contents.
 endef
 
-TARGET_CFLAGS += $(FPIC)
-
-CONFIGURE_ARGS+= \
-		--disable-python \
-		--disable-debug \
-		--without-debug \
-		$(SOFT_FLOAT_CONFIG_OPTION) \
-		--with-versioned=no
+CONFIGURE_ARGS += \
+	--disable-deprecated \
+	--enable-libasound \
+	--enable-async \
+	--enable-chmap \
+	--enable-conf \
+	--enable-timer \
+	--enable-hwdep \
+	--enable-output-buffer \
+	--enable-seq \
+	--enable-rawmidi \
+	--enable-hwdep \
+	--enable-tlv \
+	--enable-ctlasciiparser \
+	--enable-abicheck \
+	--enable-conf
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include/
+	$(INSTALL_DIR) $(1)/usr/include/alsa
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/include/alsa \
-		$(1)/usr/include/
+		$(PKG_BUILD_DIR)/src/*.h \
+		$(1)/usr/include/alsa/
+
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/lib*.{la,so*} \
+		$(1)/usr/lib/
 
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
-	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/libasound.{la,so*} \
-		$(1)/usr/lib/
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/alsa.pc \
 		$(1)/usr/lib/pkgconfig/
 
 	$(INSTALL_DIR) $(1)/usr/share/aclocal
 	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/share/aclocal/alsa.m4 \
+		$(PKG_BUILD_DIR)/alsa.m4 \
 		$(1)/usr/share/aclocal/
 endef
 
 define Package/alsa-lib/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/libasound.so.* \
+		$(PKG_INSTALL_DIR)/usr/lib/lib*.so* \
 		$(1)/usr/lib/
-
-	$(INSTALL_DIR) $(1)/usr/share/alsa/{cards,pcm}
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/share/alsa/alsa.conf \
-		$(1)/usr/share/alsa/
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/share/alsa/pcm/* \
-		$(1)/usr/share/alsa/pcm/
-	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/share/alsa/cards/* \
-		$(1)/usr/share/alsa/cards/
 endef
 
 $(eval $(call BuildPackage,alsa-lib))
