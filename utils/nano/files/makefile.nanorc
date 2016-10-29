@@ -1,0 +1,9 @@
+# unattributed syntax highlighting example from wiki.linuxhelp.net/
+
+syntax "makefile" "Makefile[^/]*$"
+color cyan "."
+color red "[:=]"
+color magenta "(\bif\b|\bifeq\b|\belse\b|\bendif\b)"
+color blue "\$+[{(][a-zA-Z0-9_-]+[})]"
+color brightblue "^[^ 	]+:"
+color green "#.*$"

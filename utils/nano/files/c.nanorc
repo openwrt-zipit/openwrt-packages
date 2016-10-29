@@ -1,0 +1,30 @@
+## Here is an example for C/C++.
+##
+syntax "c" "\.(c(c|pp|xx)?|C)$" "\.(h(h|pp|xx)?|H)$" "\.ii?$"
+color brightred "[A-Z_][0-9A-Z_]+" 
+color green "(\bfloat\b|\bdouble\b|\bbool\b|\bchar\b|\bint\b|\bshort\b|\blong\b|\bsizeof\b|\benum\b|\bvoid\b|\bstatic\b|\bconst\b|\bstruct\b|\bunion\b|\btypedef\b|\bextern\b|\s(un)?signed|inline)"
+color green "((s?size)|((u_?)?int(8|16|32|64|ptr)))_t"
+color green "(\bclass\b|\bnamespace\b|\btemplate\b|\bpublic\b|\bprotected\b|\bprivate\b|\btypename\b|\bthis\b|\bfriend\b|\bvirtual\b|\busing\b|\bmutable\b|\bvolatile\b|\bregister\b|\bexplicit\b)"
+color brightyellow "(\bfor\b|\bif\b|\bwhile\b|\bdo\b|\belse\b|\bcase\b|\bdefault\b|\bswitch\b)"
+color brightyellow "(\btry\b|\bthrow\b|\bcatch\b|\boperator\b|\bnew\b|\bdelete\b)"
+color magenta "(\bgoto\b|\bcontinue\b|\bbreak\b|\breturn\b)"
+color brightcyan "^[[:space:]]*#[[:space:]]*(define|include(_next)?|(un|ifn?)def|endif|el(if|se)|if|warning|error|pragma)"
+color brightmagenta "'([^'\]|(\\["'abfnrtv\\]))'" "'\\(([0-3]?[0-7]{1,2}))'" "'\\x[0-9A-Fa-f]{1,2}'"
+##
+## GCC builtins
+color cyan "__attribute__[[:space:]]*\(\([^)]*\)\)" "__(aligned|asm|builtin|hidden|inline|packed|restrict|section|typeof|weak)__"
+##
+## String highlighting.  You will in general want your comments and
+## strings to come last, because syntax highlighting rules will be
+## applied in the order they are read in.
+color brightyellow "<[^= 	]*>" ""(\\.|[^"])*""
+##
+## This string is VERY resource intensive!
+color brightyellow start=""(\\.|[^"])*\\[[:space:]]*$" end="^(\\.|[^"])*""
+
+## Comment highlighting
+color brightblue "//.*"
+color brightblue start="/\*" end="\*/"
+
+## Trailing whitespace
+color ,green "[[:space:]]+$"

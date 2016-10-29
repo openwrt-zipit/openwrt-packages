@@ -37,20 +37,43 @@ define Package/nano/description
   of the Pico text editor.
 endef
 
+define Package/nano-syntax
+  $(call Package/nano/Default)
+  SUBMENU:=Editors
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=Syntax highlighting definitions for nano editor
+  URL:=http://www.nano-editor.org/
+  MAINTAINER:=Jonathan Bennett <JBennett@incomsystems.biz>
+  DEPENDS:=+nano
+endef
+
 CONFIGURE_ARGS += \
-	--enable-tiny \
 	--disable-glibtest \
 	--disable-utf8 \
-        --without-slang \
-        --disable-color \
+	--disable-libmagic \
+    --without-slang 
 
 CONFIGURE_VARS += \
-	ac_cv_header_regex_h=no \
+	ac_cv_header_regex_h=yes \
 
 define Package/nano/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/$(PKG_NAME) $(1)/usr/bin/
 endef
 
-$(eval $(call BuildPackage,nano))
+define Package/nano-syntax/install
+	$(INSTALL_DIR) $(1)/etc
+		$(CP) ./files/nanorc $(1)/etc/
+	$(INSTALL_DIR) $(1)/usr/share/nano
+		$(CP) ./files/makefile.nanorc $(1)/usr/share/nano/
+		$(CP) ./files/nanorc.nanorc $(1)/usr/share/nano/
+		$(CP) ./files/c.nanorc $(1)/usr/share/nano/
+		$(CP) ./files/sh.nanorc $(1)/usr/share/nano/
+		$(CP) ./files/patch.nanorc $(1)/usr/share/nano/
+		$(CP) ./files/xml.nanorc $(1)/usr/share/nano/
+		$(CP) ./files/js.nanorc $(1)/usr/share/nano/
+endef
 
+$(eval $(call BuildPackage,nano))
+$(eval $(call BuildPackage,nano-syntax))

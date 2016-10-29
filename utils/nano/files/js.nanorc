@@ -1,0 +1,38 @@
+syntax "JavaScript" "\.(js)$"
+
+## Default
+color white "^.+$"
+color brightwhite "\."
+color brightred "\b.*="
+## Decimal, cotal and hexadecimal numbers
+#color yellow "[-+]?(\s[1-9][0-9]*|[^a-zA-Z][1-9][0-9]*|0[0-7]*|0x[0-9a-fA-F]+)([uU][lL]?|[lL][uU]?)?"
+color yellow "[-+]?([^a-zA-Z][1-9][0-9]*|0[0-7]*|0x[0-9a-fA-F]+)([uU][lL]?|[lL][uU]?)?"
+## Floating point number with at least one digit before decimal point
+color yellow "<[-+]?([0-9]+\.[0-9]*|[0-9]*\.[0-9]+)([EePp][+-]?[0-9]+)?[fFlL]?"
+color yellow "<[-+]?([0-9]+[EePp][+-]?[0-9]+)[fFlL]?"
+## Keywords
+color green "(\bbreak\b|\bcase\b|\bcatch\b|\bcontinue\b|\bdefault\b|\bdelete\b|\bdo\b|\belse\b|\bfinally\b)"
+#color green "(\sbreak\s|\scase\s|\scatch\s|\scontinue\s|\sdefault\s|\sdelete\s|do[^a-zA-Z]|\selse\s|\sfinally\s)"
+#color brightmagenta "(\b[A-Z]+\b|\b([A-Z]+_)+[A-Z]+\b)"
+color brightmagenta "(\b.*:)"
+color magenta "=|:"
+
+color green "(\bfor\b|\bfunction\b|\bif\b|\bin\b|\binstanceof\b|\bnew\b|\bnull\b|\breturn\b|\bswitch\b)"
+color green "(\bswitch\b|\bthis\b|\bthrow\b|\btry\b|\btypeof\b|\bundefined\b|\bvar\b|\bvoid\b|\bwhi|\bwhile\b|b\with\b)"
+## Type specifiers
+color red "(\bArray\b|\bBoolean\b|\bDate\b|\bEnumerator\b|\bError\b|\bFunction\b|\bMath\b)"
+color red "(\bNumber\b|\bObject\b|\bRegExp\b|\bString\b)"
+color red "(\btrue\b|\bfalse\b)"
+## String
+color brightyellow "L?\"(\\"|[^"])*\""
+color brightyellow "L?'(\'|[^'])*'"
+## Escapes
+color red "\\[0-7][0-7]?[0-7]?|\\x[0-9a-fA-F]+|\\[bfnrt'"\?\\]"
+
+## Comments
+#color magenta start="/\*" end="\*/"
+
+## Comment highlighting
+color brightblue "//.*"
+color brightblue start="/\*" end="\*/"
+

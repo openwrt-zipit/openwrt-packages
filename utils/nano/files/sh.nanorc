@@ -1,0 +1,22 @@
+## Here is an example for Bourne shell scripts.
+##
+syntax "sh" "\.sh$"
+header "^#!.*/(ba|k|pdk)?sh[-0-9_]*"
+icolor cyan "."
+icolor brightgreen "^[0-9A-Z_]+\(\)"
+color yellow "(\bcase\b|\bdo\b|\bdone\b|\belif\b|\belse\b|\besac\b|\bexit\b|\bfi\b|\bfor\b|\bfunction\b|\bif\b|\bthen\b|\buntil\b|\bwhile\b)"
+color brightblue "(\bin\b|\blocal\b|\bread\b|\breturn\b|\bselect\b|\bshift\b|\btime\b)"
+color brightblue "(\{|\}|\(|\)|\;|\]|\[|`|\\|\$|<|>|!|=|&|\|)"
+color brightblue "-[Ldefgruwxp]"
+color brightgreen "-(eq|ne|gt|lt|ge|le|s|n|z)"
+color brightblue "(cat\b|\bcd\b|\bchmod\b|\bchown\b|\bcp\b|\becho\b|\benv\b|\bexport\b|\bgrep\b|\binstall\b|\blet\b|\bln\b|\bmake\b|\bmkdir\b|\bmv\b|\brm\b|\bsed\b|\bset\b|\btar\b|\btouch\b|\bumask\b|\bunset\b|\bwhich\b)"
+color cyan "(^|[[:space:]])#.*$"
+color brightwhite ""(\\.|[^"])*"" "'(\\.|[^'])*'"
+color brightblue "[[:space:]]+$"
+icolor brightred "\$\{?[0-9A-Z_!@#$*?-]+\}?"
+
+## Comments
+icolor blue "^[[:space:]]*#.*$"
+icolor blue "^[[:space:]]*##.*$"
+
+
