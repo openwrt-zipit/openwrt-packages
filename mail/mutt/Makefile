@@ -19,7 +19,6 @@ PKG_LICENSE:=GPL-2.0+
 PKG_LICENSE_FILES:=GPL
 PKG_MAINTAINER:=Phil Eichinger <phil@zankapfel.net>
 
-
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -27,7 +26,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/mutt
   SECTION:=mail
   CATEGORY:=Mail
-  DEPENDS:=+libopenssl +libncursesw +zlib
+  DEPENDS:=+libopenssl +libncursesw +zlib +libgdbm
   TITLE:=Console mail client
   URL:=http://www.mutt.org/
 endef
@@ -43,7 +42,8 @@ CONFIGURE_ARGS += \
 	--enable-pop \
 	--enable-imap \
 	--with-ssl \
-	--without-idn
+	--without-idn \
+	--enable-hcache
 
 define Package/mutt/install
 	$(INSTALL_DIR) $(1)/usr/bin

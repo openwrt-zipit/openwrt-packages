@@ -1,0 +1,11 @@
+--- a/hcachever.sh.in	2016-12-10 11:19:55.616176186 -0600
++++ b/hcachever.sh.in	2016-12-10 11:20:19.492176667 -0600
+@@ -81,7 +81,7 @@
+ done
+ echo " */" >> $TMPD
+ 
+-MD5TEXT=`echo "$TEXT" | ./mutt_md5`
++MD5TEXT=`echo "$TEXT" | md5sum`
+ echo "#define HCACHEVER 0x"`echo $MD5TEXT | cut -c-8` >> $TMPD
+ 
+ # TODO: validate we have all structs
